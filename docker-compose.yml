@@ -1,0 +1,48 @@
+services:
+  trainer:
+    build: .
+    container_name: kd_trainer
+    working_dir: /workspace
+    volumes:
+      - ./:/workspace
+    command: bash -lc "python -m src.pipeline"
+    healthcheck:
+      test: ["CMD", "python", "-c", "from pathlib import Path; import sys; required=['output/teacher/teacher_model.pth','output/teacher/teacher_metrics.json','output/student/best_student_model.pth','output/student/best_student_metrics.json','output/sweep_results.csv']; sys.exit(0 if all(Path(path).exists() for path in required) else 1)"]
+      interval: 10s
+      timeout: 5s
+      retries: 30
+      start_period: 20s
+
+  app:
+    build: .
+    container_name: kd_app
+    working_dir: /workspace
+    volumes:
+      - ./:/workspace
+    environment:
+      - PYTHONPATH=/workspace
+    command: bash -lc "streamlit run src/app.py --server.address 0.0.0.0 --server.port 8501"
+    ports:
+      - "8501:8501"
+    depends_on:
+      trainer:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8501/_stcore/health').read(); print('ok')"]
+      interval: 10s
+      timeout: 5s
+      retries: 30
+      start_period: 20s
+
+  playwright:
+    build:
+      context: .
+      dockerfile: Dockerfile.playwright
+    container_name: kd_playwright
+    working_dir: /workspace
+    volumes:
+      - ./:/workspace
+    environment:
+      - APP_URL=http://host.docker.internal:8501
+    depends_on:
+      - app

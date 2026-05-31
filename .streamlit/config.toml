@@ -1,0 +1,8 @@
+[theme]
+base = "light"
+# Slightly more colorful palette: bright cyan primary with soft cyan accents
+primaryColor = "#06b6d4"
+backgroundColor = "#ffffff"
+secondaryBackgroundColor = "#f0fbff"
+textColor = "#022c43"
+font = "sans serif"

@@ -1,0 +1,11 @@
+FROM mcr.microsoft.com/playwright/python:latest
+
+WORKDIR /workspace
+
+# Copy repository so tests can run inside the image
+COPY . /workspace
+
+# Ensure Playwright browsers are installed at build time (cached in image)
+RUN python -m pip install playwright && python -m playwright install --with-deps chromium
+
+ENTRYPOINT ["python", "tests/playwright_check.py"]

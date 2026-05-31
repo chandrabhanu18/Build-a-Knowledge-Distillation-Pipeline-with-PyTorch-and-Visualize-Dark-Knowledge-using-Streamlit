@@ -1,0 +1,7 @@
+{
+  "teacher_model_path": "output/teacher/teacher_model.pth",
+  "teacher_metrics_path": "output/teacher/teacher_metrics.json",
+  "best_student_model_path": "output/student/best_student_model.pth",
+  "best_student_metrics_path": "output/student/best_student_metrics.json",
+  "sweep_results_path": "output/sweep_results.csv"
+}
