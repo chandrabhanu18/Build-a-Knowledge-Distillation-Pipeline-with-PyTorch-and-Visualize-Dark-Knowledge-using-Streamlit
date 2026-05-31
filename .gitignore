@@ -1,0 +1,23 @@
+__pycache__/
+*.py[cod]
+*.so
+.Python
+env/
+venv/
+.venv/
+.pytest_cache/
+dist/
+build/
+.DS_Store
+.env
+*.egg-info/
+# Editor folders
+.idea/
+*.iml
+# Node
+node_modules/
+# Ignore system files
+Thumbs.db
+
+# Keep these (output contains submission artifacts)
+# Do NOT ignore output/
